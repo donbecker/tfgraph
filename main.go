@@ -1,7 +1,123 @@
 package main
 
-import "fmt"
+// pull graph project locally
+// go get github.com/awalterschulze/gographviz
+
+// run from vscode
+// open terminal: Crtl+`
+// go run main.go
+
+import (
+	"github.com/awalterschulze/gographviz"
+	"fmt"
+	"io/ioutil"
+	//"log"
+	//"os"
+	//"path/filepath"
+	//"strconv"
+	//"strings"
+)
+
 
 func main() {
-	fmt.Printf("Hello, world from Go.\n")
+	fmt.Printf("Start of tfgraph main.\n")
+	
+	// file output from terraform graph ended up being encoding: UTF-16 LE
+	// not sure if this is a windows thing
+	//https://stackoverflow.com/questions/32518432/how-to-convert-from-an-encoding-to-utf-8-in-go
+	//https://gist.github.com/bradleypeabody/185b1d7ed6c0c2ab6cec
+	// for now, just convert encoding in vscode:
+	dat, err := ioutil.ReadFile("./simpletfutf8.dot")
+	//dat, err := ioutil.ReadFile("./myfileoutput.dot")
+	//dat, err := ioutil.ReadFile("./myfile.dot")
+	check(err)
+
+	graph, err := gographviz.Read(dat)
+	check(err)
+
+	//add node
+//	graph.AddNode("","bob",nil)
+
+
+
+	// no graph name by default, set it
+	graph.SetName("tfgraph")
+
+// returns false, not sure why it can't find the subgraph
+//	var mySubGraph string = strconv.FormatBool(graph.IsSubGraph("root"))
+//	fmt.Printf("mySubGraph: %s", mySubGraph)
+
+//	var sg = gographviz.NewSubGraph("sgbob")
+
+	//fmt.Println(sg)
+
+//	graph.SubGraphs
+
+//	graph.AddSubGraph(sg)
+
+	s := graph.String()	
+	fmt.Println(s)
+
+//	graphAst, _ := gographviz.Parse(dat)
+//	graph, _ := gographviz.NewAnalyzedGraph(graphAst)
+//	graph := gographviz.NewGraph()
+//	if err := gographviz.Analyse(graphAst, graph); err != nil {
+//		panic(err)
+//	}
+
+//	var mySubGraph = strconv.FormatBool(graph.IsSubGraph("root"))
+//	fmt.Printf("mySubGraph: %s", mySubGraph)
+
+	//graph.AddNode("root", "bob", nil)
+	
+//	ioutil.WriteFile("simpletf-output.dot", []byte(graph.String()), 0644)	
+
+
+
+
+
+	// grab our path
+	// dir := os.Args[1]
+	// absolutePath, err := filepath.Abs(dir)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	//output file name
+	// outputName := filepath.Base(absolutePath)
+	// outputFilename := fmt.Sprintf("%s.dot", outputName)
+
+
+	//output file
+	// log.Printf("Writing output to %s...", outputFilename)
+	// //err = ioutil.WriteFile(outputFilename, []byte(graph.String()), 0644)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	fmt.Printf("End of tfgraph main.\n")
+}
+
+
+func graphsample() {
+
+	graphAst, _ := gographviz.ParseString(`digraph G {}`)
+	graph := gographviz.NewGraph()
+	if err := gographviz.Analyse(graphAst, graph); err != nil {
+		panic(err)
+	}
+	graph.AddNode("G", "a", nil)
+	graph.AddNode("G", "b", nil)
+	graph.AddEdge("a", "b", true, nil)
+	graph.AddNode("G","bob", nil)
+	graph.AddEdge("bob", "b", true, nil)
+	
+	ioutil.WriteFile("myfileoutput.dot", []byte(graph.String()), 0644)
+}
+
+//streamline error checking
+func check(e error) {
+    if e != nil {
+        panic(e)
+    }
 }
