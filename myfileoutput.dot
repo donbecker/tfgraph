@@ -1,8 +1,0 @@
-digraph G {
-	a->b;
-	bob->b;
-	a;
-	b;
-	bob;
-
-}

@@ -13,6 +13,7 @@ import (
 	"io/ioutil"
 	//"log"
 	//"os"
+	"os/exec"
 	//"path/filepath"
 	//"strconv"
 	//"strings"
@@ -56,7 +57,27 @@ func main() {
 //	graph.AddSubGraph(sg)
 
 	s := graph.String()	
-	fmt.Println(s)
+	//fmt.Println(s)
+
+	//output modified dot file
+	ioutil.WriteFile("tfgraph.dot", []byte(s), 0644)
+
+	//current dir on windows
+	//gvCmd := exec.Command("cmd.exe", "/C", "echo %CD%")
+
+	// call graphviz to convert DOT file to SVG
+	gvCmd := exec.Command("cmd", "/C", "dot", "-Tsvg", "C:/Users/Don/code/Go-ws/src/github.com/donbecker/tfgraph/tfgraph.dot",  ">", "tfgraph.svg")
+	gvCmd.Output()
+
+	// //return values from graphviz
+	// gvOut, err := gvCmd.Output()
+    // if err != nil {
+    //     panic(err)
+	// }
+    // fmt.Println("> gv")
+    // fmt.Println(string(gvOut))	
+
+
 
 //	graphAst, _ := gographviz.Parse(dat)
 //	graph, _ := gographviz.NewAnalyzedGraph(graphAst)
@@ -70,7 +91,7 @@ func main() {
 
 	//graph.AddNode("root", "bob", nil)
 	
-//	ioutil.WriteFile("simpletf-output.dot", []byte(graph.String()), 0644)	
+//		
 
 
 
