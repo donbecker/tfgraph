@@ -12,7 +12,7 @@
 *.out
 
 # module build dir
-**/.module/*
+**/module/*
 
 # zip
 tfgraph.zip
