@@ -14,5 +14,5 @@
 # module build dir
 **/module/*
 
-# zip
-tfgraph.zip
+# exe
+tfgraph.exe

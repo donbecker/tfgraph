@@ -51,30 +51,33 @@
 ## Script notes
 
 * The bulk of Terraform is written in Go. So it makes sense to do the same.
-* Initial thought for distribution was to use a terraform module, but that would require user to manually invoke the embedded Go script. 
-* Another option is writing a custom Terraform provider (plugin)
-    * https://www.terraform.io/docs/extend/writing-custom-providers.html
-    * https://www.terraform.io/docs/plugins/basics.html
-    * To test your plugin, the easiest method is to copy your terraform binary to $GOPATH/bin and ensure that this copy is the one being used for testing. terraform init will search for plugins within the same directory as the terraform binary, and $GOPATH/bin is the directory into which go install will place the plugin executable.
-    * Unfortunately it looks like retrieval of plugins is a bit of a mess
-        * https://github.com/hashicorp/terraform/issues/15252
-* So thinking we do this with a go script, distributed via a module.
-    * User adds module ref
-    * User runs `terraform init`
-        * Downloads module, and untars
-    * ??? where do we find the module under `.terraform` directory ???
-    * User runs `graphme.go` script
-* `terraform graph` scripts
-    * located the rest of the terraform graph scripts
-        * https://github.com/hashicorp/terraform/blob/master/command/graph.go
-        * https://github.com/hashicorp/terraform/blob/master/terraform/graph.go
-        * https://github.com/hashicorp/terraform/blob/master/dag/graph.go
+
+* Terraform Module or Plugin
+    * FINAL: Abandoned distribution via Terraform module or Plugin. No slick way to locate our exe in the .terraform folder. Plugin abandoned as we need to call `terraform graph` in our exe.
+    * Initial thought for distribution was to use a terraform module, but that would require user to manually invoke the embedded Go script. 
+    * Another option is writing a custom Terraform provider (plugin)
+        * https://www.terraform.io/docs/extend/writing-custom-providers.html
+        * https://www.terraform.io/docs/plugins/basics.html
+        * To test your plugin, the easiest method is to copy your terraform binary to $GOPATH/bin and ensure that this copy is the one being used for testing. terraform init will search for plugins within the same directory as the terraform binary, and $GOPATH/bin is the directory into which go install will place the plugin executable.
+        * Unfortunately it looks like retrieval of plugins is a bit of a mess
+            * https://github.com/hashicorp/terraform/issues/15252
+        * Yet another option is using the `local-exec` provisioner
+            * https://www.terraform.io/docs/provisioners/local-exec.html
+            * "The local-exec provisioner invokes a local executable after a resource is created. This invokes a process on the machine running Terraform, not on the resource."
+            * So can we use this to call our Go script? 
+    * So thinking we do this with a go script, distributed via a module.
+        * User adds module ref
+        * User runs `terraform init`
+            * Downloads module, and untars
+        * ??? where do we find the module under `.terraform` directory ???
+        * User runs `graphme.go` script
+    * `terraform graph` scripts
+        * located the rest of the terraform graph scripts
+            * https://github.com/hashicorp/terraform/blob/master/command/graph.go
+            * https://github.com/hashicorp/terraform/blob/master/terraform/graph.go
+            * https://github.com/hashicorp/terraform/blob/master/dag/graph.go
 
 
-* Yet another option is using the `local-exec` provisioner
-    * https://www.terraform.io/docs/provisioners/local-exec.html
-    * "The local-exec provisioner invokes a local executable after a resource is created. This invokes a process on the machine running Terraform, not on the resource."
-    * So can we use this to call our Go script? 
 
 
 * Scripts
@@ -130,16 +133,16 @@
 ## Building / Packaging
 * pull gographviz dependency locally into src dir
     * `go get github.com/awalterschulze/gographviz`
+* output tfgraph.exe in Go-WS bin dir
+    * `go install`
+
+
+### Building Misc Commands
+* previous tarball command (causes terraform symlink error on init)
+    * `7z a -ttar -so archive.tar .\module\* | 7z a -sio tfgraph.tar.gz`
 * output tfgraph.exe in project src dir
     * `go build`
 * move file to module dir
     * `mv -Force tfgraph.exe .\module`
 * create module zip
     * `7z a -tzip tfgraph.zip .\module\*`
-
-
-### Building Misc Commands
-* output tfgraph.exe in Go-WS bin dir
-    * `go install`
-* previous tarball command (causes terraform symlink error on init)
-    * `7z a -ttar -so archive.tar .\module\* | 7z a -sio tfgraph.tar.gz`
