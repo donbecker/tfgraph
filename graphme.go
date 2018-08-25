@@ -11,7 +11,8 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"github.com/awalterschulze/gographviz"
+	"io/ioutil"
 	"os"
 	"os/exec"
 )
@@ -22,23 +23,37 @@ func main() {
 	//detect if our current dir is in a terraform project
 	//grab our path
 	curdir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
+	check(err)
 	
 	fmt.Print(curdir)
-
 
 	//call `terraform graph` to generate a DOT file
 	tfCmd := exec.Command("cmd", "/C", "terraform", "graph", ">", "graph.dot")
 	tfCmd.Output()
 
-	//proceess the DOT file
-	ProcessDOT()
+	//process the DOT file
+	dat, err := ioutil.ReadFile("./graph.dot")
+	check(err)
+
+	graph, err := gographviz.Read(dat)
+	check(err)
+
+	graph.SetName("tfgraph")
+	s := graph.String()	
+	
+	//output modified dot file
+	ioutil.WriteFile("tfgraph.dot", []byte(s), 0644)
 
 	//call graphviz to convert the DOT file to SVG
-	gvCmd := exec.Command("cmd", "/C", "dot", "-Tsvg", "graph.dot",  ">", "tfgraph.svg")
+	gvCmd := exec.Command("cmd", "/C", "dot", "-Tsvg", "tfgraph.dot",  ">", "tfgraph.svg")
 	gvCmd.Output()
 
 	fmt.Printf("End of graphme.go.\n")
+}
+
+//streamline error checking
+func check(e error) {
+    if e != nil {
+        panic(e)
+    }
 }
