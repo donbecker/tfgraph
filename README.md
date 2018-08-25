@@ -30,14 +30,11 @@
 * vscode: extensions: SVG Viewer v1.4.4 by cssho
 
 ## Icons
-* simple icons page: https://aws.amazon.com/architecture/icons/
-* direct link: https://s3-us-west-2.amazonaws.com/awswebanddesign/Architecture+Icons/AWS-Arch-Icon-Sets_Feb-18/PNG%2C+SVG%2C+EPS_18.02.22.zip
-* unzip
-
-
-* display image in dot file layout: https://stackoverflow.com/questions/8073115/how-do-i-get-dot-to-display-an-image-for-a-node
-
-* Icons used (in 'PNG, SVG, EPS' folder)
+* AWS Icons Package
+    * simple icons page: https://aws.amazon.com/architecture/icons/
+    * direct link: https://s3-us-west-2.amazonaws.com/awswebanddesign/Architecture+Icons/AWS-Arch-Icon-Sets_Feb-18/PNG%2C+SVG%2C+EPS_18.02.22.zip
+    * unzip
+* PNG Icons used (in 'PNG, SVG, EPS' folder)
     * VPC
         * ..\General\General_virtualprivatecloud.png
         * ..\Compute\Compute_AmazonVPC.png
@@ -65,7 +62,7 @@
     * Router
         * ..\Networking & Content Delivery\NetworkingContentDelivery_AmazonVPC_router.png
 
-## Layout Notes
+## Layout Style Notes
 
 * Region: Outermost box, solid black line, transparent background, "AWS" logo in upper left, rounded corners, usually says "Region" at bottom. Not sure how multi-region diagrams look, initially only support one region.
 
@@ -79,7 +76,7 @@
 
 * EC2 Instance: Orange box EC2 icon, Name in black text centered left to right and below box.
 
-# Script notes
+## Script notes
 
 * The bulk of Terraform is written in Go. So it makes sense to do the same.
 * Initial thought for distribution was to use a terraform module, but that would require user to manually invoke the embedded Go script. 
@@ -109,6 +106,14 @@
 
 
 * Scripts
+    * `graphme.go`
+        * Main (wrapper) script
+        * "graphme.go" is dev name of this file, `tfgraph` will map to this file/be the release name
+        * Steps
+            * Runs `terraform graph` which outputs DOT file
+            * Calls `graphprocess.go` to process DOT file
+            * Calls `graphviz` to render the SVG graph from DOT file
+
     * `graphprocess.go`
         * Updates the DOT file created by `terraform graph` command
         * Different rulesets used for different intended diagram types
@@ -121,11 +126,6 @@
                 * https://github.com/ilikeorangutans/grails-service-visualizer
                 * https://ilikeorangutans.github.io/2014/05/03/using-golang-and-graphviz-to-visualize-complex-grails-applications/
 
-    * `graphme.go`
-        * Wrapper script
-        * Runs `terraform graph`, calls `graphprocess.go` to process file, then calls `graphviz` to render the graph
-            * example command: `terraform graph | dot -Tsvg > graph.svg`
-            * example command with new graph: `terraform graph | graphprocess.go | dot -Tsvg > graph.svg`
 
 * Go Distribution notes
     * Binary is in the terraform module
@@ -134,3 +134,5 @@
     * tfgraph go binary
     * aws icons
     * graphviz ?
+* Misc links
+    * display image in dot file layout: https://stackoverflow.com/questions/8073115/how-do-i-get-dot-to-display-an-image-for-a-node
