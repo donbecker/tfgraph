@@ -130,11 +130,6 @@
 ## Building / Packaging
 * pull gographviz dependency locally into src dir
     * `go get github.com/awalterschulze/gographviz`
-* output tfgraph.exe in Go-WS bin dir
-    * `go install`
-
-
-### Building Misc    
 * output tfgraph.exe in project src dir
     * `go build`
 * move file to module dir
@@ -143,5 +138,8 @@
     * `7z a -tzip tfgraph.zip .\module\*`
 
 
+### Building Misc Commands
+* output tfgraph.exe in Go-WS bin dir
+    * `go install`
 * previous tarball command (causes terraform symlink error on init)
     * `7z a -ttar -so archive.tar .\module\* | 7z a -sio tfgraph.tar.gz`
