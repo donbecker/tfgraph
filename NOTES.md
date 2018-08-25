@@ -109,3 +109,10 @@
     * graphviz ?
 * Misc links
     * display image in dot file layout: https://stackoverflow.com/questions/8073115/how-do-i-get-dot-to-display-an-image-for-a-node
+    * online svg editor: http://www.drawsvg.org/
+    * styling SVG with CSS: http://svgtutorial.com/styling-svg-with-css/
+    * Go by Example: https://gobyexample.com/
+        * Command-Line Flags: https://gobyexample.com/command-line-flags
+        * Spawning Processes: https://gobyexample.com/spawning-processes
+        * Reading Files: https://gobyexample.com/reading-files
+        * Writing Files: https://gobyexample.com/writing-files
