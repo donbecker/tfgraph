@@ -38,11 +38,11 @@ func main() {
 	terraformInit.Output()
 
 	//call `terraform graph` to generate a DOT file
-	terrformGraph := exec.Command("cmd", "/C", "terraform", "graph", ">", "./.terraform/graph.dot")
+	terrformGraph := exec.Command("cmd", "/C", "terraform", "graph", ">", "./.terraform/terraformgraph.dot")
 	terrformGraph.Output()
 
 	//process the DOT file
-	dat, err := ioutil.ReadFile("./.terraform/graph.dot")
+	dat, err := ioutil.ReadFile("./.terraform/terraformgraph.dot")
 	check(err)
 
 	graph, err := gographviz.Read(dat)
