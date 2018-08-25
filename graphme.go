@@ -46,9 +46,11 @@ func main() {
 	dat, err := ioutil.ReadFile("./.terraform/terraformgraph.dot")
 	check(err)
 
+	//scrub unneeded items
 	lines := strings.Split(string(dat), "\n")
-
 	for i, line := range lines {
+
+			//scrub
 			if strings.Contains(line, "boundary") {
 					lines[i] = ""
 			}
@@ -58,11 +60,27 @@ func main() {
 			if strings.Contains(line, "[root] provider") {
 				lines[i] = ""
 			}
+
+			//nodes
+			if strings.Contains(line, "aws_vpc.") && strings.Contains(line, "[label") {
+				fmt.Print("Found vpc node\n", line, "\n")
+				fmt.Print("Update vpc node\n", strings.Replace(line, "box", "ellipse", -1), "\n")
+				lines[i] = strings.Replace(line, "box", "ellipse", -1)
+			}
+			if strings.Contains(line, "aws_subnet.") && strings.Contains(line, "[label") {
+				fmt.Print("Found subnet node\n", line, "\n")
+			}
+			
+			//relations/edges
+			if strings.Contains(line, "aws_subnet.") && strings.Contains(line, "aws_vpc.") {
+				fmt.Print("Found vpc to subnet relation\n", line, "\n")
+			}
 	}
 	output := strings.Join(lines, "\n")
 	err = ioutil.WriteFile("./.terraform/scrub.dot", []byte(output), 0644)
 	check(err)
 
+	//parse dot file with graphviz parser and modify
 	scrubdat, err := ioutil.ReadFile("./.terraform/scrub.dot")
 	check(err)
 
