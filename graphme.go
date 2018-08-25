@@ -12,5 +12,7 @@ import (
 func main() {
 	fmt.Printf("Start of graphme.go.\n")
 
+	ProcessDOT()
+
 	fmt.Printf("End of graphme.go.\n")
 }

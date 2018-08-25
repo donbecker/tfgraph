@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func main() {
+func ProcessDOT() {
 	fmt.Printf("Start of graphprocess.go.\n")
 
 	fmt.Printf("End of graphprocess.go.\n")
