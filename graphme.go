@@ -63,16 +63,19 @@ func main() {
 
 			//nodes
 			if strings.Contains(line, "aws_vpc.") && strings.Contains(line, "[label") {
+				// "[root] aws_vpc.stage" [label = "aws_vpc.stage", shape = "box"]
 				fmt.Print("Found vpc node\n", line, "\n")
 				fmt.Print("Update vpc node\n", strings.Replace(line, "box", "ellipse", -1), "\n")
 				lines[i] = strings.Replace(line, "box", "ellipse", -1)
 			}
 			if strings.Contains(line, "aws_subnet.") && strings.Contains(line, "[label") {
+				// "[root] aws_subnet.public-2a" [label = "aws_subnet.public-2a", shape = "box"]
 				fmt.Print("Found subnet node\n", line, "\n")
 			}
 			
 			//relations/edges
 			if strings.Contains(line, "aws_subnet.") && strings.Contains(line, "aws_vpc.") {
+				// "[root] aws_subnet.public-2a" -> "[root] aws_vpc.stage"
 				fmt.Print("Found vpc to subnet relation\n", line, "\n")
 			}
 	}
