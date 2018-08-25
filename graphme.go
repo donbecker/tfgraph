@@ -33,6 +33,10 @@ func main() {
 		os.Mkdir(path, 0770)
 	}
 
+	//call `terraform init` before calling `terraform graph` (required by terraform)
+	terraformInit := exec.Command("cmd", "/C", "terraform", "init")
+	terraformInit.Output()
+
 	//call `terraform graph` to generate a DOT file
 	terrformGraph := exec.Command("cmd", "/C", "terraform", "graph", ">", "./.terraform/graph.dot")
 	terrformGraph.Output()
