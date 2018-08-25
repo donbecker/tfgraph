@@ -81,6 +81,7 @@
     * `graphme.go`
         * Main (wrapper) script
         * "graphme.go" is dev name of this file, `tfgraph` will map to this file/be the release name
+            * So for dev, cd into tfproject folder, run `terraform init` and then run `.\go run graphme.go`
         * Steps
             * Runs `terraform graph` which outputs DOT file
             * Calls `graphprocess.go` to process DOT file
