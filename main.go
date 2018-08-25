@@ -20,7 +20,7 @@ import (
 )
 
 
-func main() {
+func notmain() {
 	fmt.Printf("Start of tfgraph main.\n")
 	
 	// file output from terraform graph ended up being encoding: UTF-16 LE

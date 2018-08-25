@@ -116,3 +116,20 @@
         * Spawning Processes: https://gobyexample.com/spawning-processes
         * Reading Files: https://gobyexample.com/reading-files
         * Writing Files: https://gobyexample.com/writing-files
+    * DOT File Links
+        * https://www.graphviz.org/pdf/dotguide.pdf
+    * Grails Dep Visualizer using Graphviz: https://github.com/ilikeorangutans/grails-service-visualizer
+    * Go GraphViz Parser: https://github.com/awalterschulze/gographviz
+        * GoDoc: https://godoc.org/github.com/awalterschulze/gographviz#SubGraph
+    * Go Build Command: https://dave.cheney.net/2013/10/15/how-does-the-go-build-command-work
+
+## Deps
+
+
+
+## Building / Packaging
+* pull gographviz dependency locally
+    * `go get github.com/awalterschulze/gographviz`
+* build tfgraph
+    * `go build`
+    * outputs tfgraph.exe
