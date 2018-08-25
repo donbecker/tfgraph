@@ -15,6 +15,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 func main() {
@@ -25,14 +26,19 @@ func main() {
 	curdir, err := os.Getwd()
 	check(err)
 	
-	fmt.Print(curdir)
+	// fmt.Print(curdir)
+	path := filepath.Join(curdir, ".terraform")
+	
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		os.Mkdir(path, 0770)
+	}
 
 	//call `terraform graph` to generate a DOT file
-	tfCmd := exec.Command("cmd", "/C", "terraform", "graph", ">", "graph.dot")
-	tfCmd.Output()
+	terrformGraph := exec.Command("cmd", "/C", "terraform", "graph", ">", "./.terraform/graph.dot")
+	terrformGraph.Output()
 
 	//process the DOT file
-	dat, err := ioutil.ReadFile("./graph.dot")
+	dat, err := ioutil.ReadFile("./.terraform/graph.dot")
 	check(err)
 
 	graph, err := gographviz.Read(dat)
@@ -42,11 +48,16 @@ func main() {
 	s := graph.String()	
 	
 	//output modified dot file
-	ioutil.WriteFile("tfgraph.dot", []byte(s), 0644)
+	ioutil.WriteFile("./.terraform/tfgraph.dot", []byte(s), 0644)
 
 	//call graphviz to convert the DOT file to SVG
-	gvCmd := exec.Command("cmd", "/C", "dot", "-Tsvg", "tfgraph.dot",  ">", "tfgraph.svg")
-	gvCmd.Output()
+	gvConvert := exec.Command("cmd", "/C", "dot", "-Tsvg", "./.terraform/tfgraph.dot",  ">", "./graph.svg")
+	gvConvert.Output()
+
+	//TODO add this as an optional flag
+	//open svg file
+	openSvg := exec.Command("powershell.exe", "-Command", "./graph.svg")
+	openSvg.Output()
 
 	fmt.Printf("End of graphme.go.\n")
 }
