@@ -37,6 +37,8 @@ func main() {
 	ProcessDOT()
 
 	//call graphviz to convert the DOT file to SVG
+	gvCmd := exec.Command("cmd", "/C", "dot", "-Tsvg", "graph.dot",  ">", "tfgraph.svg")
+	gvCmd.Output()
 
 	fmt.Printf("End of graphme.go.\n")
 }
