@@ -16,6 +16,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -45,10 +46,35 @@ func main() {
 	dat, err := ioutil.ReadFile("./.terraform/terraformgraph.dot")
 	check(err)
 
-	graph, err := gographviz.Read(dat)
+	lines := strings.Split(string(dat), "\n")
+
+	for i, line := range lines {
+			if strings.Contains(line, "boundary") {
+					lines[i] = ""
+			}
+			if strings.Contains(line, "[root] root") {
+				lines[i] = ""
+			}
+			if strings.Contains(line, "[root] provider") {
+				lines[i] = ""
+			}
+	}
+	output := strings.Join(lines, "\n")
+	err = ioutil.WriteFile("./.terraform/scrub.dot", []byte(output), 0644)
+	check(err)
+
+	scrubdat, err := ioutil.ReadFile("./.terraform/scrub.dot")
+	check(err)
+
+	graph, err := gographviz.Read(scrubdat)
 	check(err)
 
 	graph.SetName("tfgraph")
+
+	//add node
+//	graph.AddNode("","bob",nil)
+
+
 	s := graph.String()	
 	
 	//output modified dot file
