@@ -103,13 +103,6 @@
                 * https://ilikeorangutans.github.io/2014/05/03/using-golang-and-graphviz-to-visualize-complex-grails-applications/
 
 
-* Go Distribution notes
-    * Binary is in the terraform module
-
-* Module packge notes
-    * tfgraph go binary
-    * aws icons
-    * graphviz ?
 * Misc links
     * display image in dot file layout: https://stackoverflow.com/questions/8073115/how-do-i-get-dot-to-display-an-image-for-a-node
     * online svg editor: http://www.drawsvg.org/
@@ -125,9 +118,6 @@
     * Go GraphViz Parser: https://github.com/awalterschulze/gographviz
         * GoDoc: https://godoc.org/github.com/awalterschulze/gographviz#SubGraph
     * Go Build Command: https://dave.cheney.net/2013/10/15/how-does-the-go-build-command-work
-
-## Deps
-
 
 
 ## Building / Packaging
